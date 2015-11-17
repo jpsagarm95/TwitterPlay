@@ -17,12 +17,3 @@ try:
 
     # Receive data from the server and shut down
     received = sock.recv(1024)
-    
-finally:
-    sock.close()
-
-print "Sent:     {}".format(data)
-print "Received: {}".format(received)
-    
-    
-    

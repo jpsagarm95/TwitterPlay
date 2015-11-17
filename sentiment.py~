@@ -50,8 +50,8 @@ while True:
 		hash_words = []
 		for part in word_parts:
 			if len(part) > 0:
-				hash_word = part.split(" ")[0].lower()
-				dictionary_tweets[hash_word][sentiment] = dictionary_tweets[hash_word][sentiment] + 1
+			hash_word = part.split(" ")[0].lower()
+			dictionary_tweets[hash_word][sentiment] = dictionary_tweets[hash_word][sentiment] + 1
 		
 		if(tweet_count == 200):
 			print dictionary_tweets
