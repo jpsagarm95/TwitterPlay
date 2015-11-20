@@ -32,7 +32,7 @@ classifier = NaiveBayesClassifier.train(trainfeats)
 #classifier.show_most_informative_features()
 while True:	
 	filename = str(count) + ".txt"
-	while not os.path.isfile(filename):
+	while not os.path.isfile(str(count+1)+'.txt'):
 		continue
 	f = open(filename,'r')
 	dictionary_tweets = defaultdict(lambda:[0,0])

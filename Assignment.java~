@@ -55,8 +55,9 @@ public class Assignment {
 					String filename = totalCount / 100 + ".txt";
 					File f = new File(filename);
 					PrintWriter out = null;
-						
+					
 					if ( f.exists() && !f.isDirectory() ) {
+						totalCount++;
 						//System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText() + " -> "+ status.getCreatedAt());
 						//String mapstring = status.getUser().getScreenName() + " - " + status.getText() + " -> "+ status.getCreatedAt() +"\n";
 						String mapstring = status.getText().replace("\n"," ") +"\n";
@@ -70,7 +71,6 @@ public class Assignment {
 					    out.close();
 					}
 					else {
-						
 					    try {
 							out = new PrintWriter(filename);
 						} catch (FileNotFoundException e) {
@@ -80,8 +80,6 @@ public class Assignment {
 					    out.println(mapstring);
 					    out.close();
 					}
-					totalCount++;
-					
 				}
 				
 				@Override
