@@ -22,14 +22,19 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 	
 
     def handle(self):
+    	print "dddddd"
         # self.request is the TCP socket connected to the client
-        self.data = self.request.recv(1024).strip()
+        tweets = (self.request.recv(1024).strip()).split("\n")
         
-        print "{} wrote:".format(self.client_address[0])
-        print self.data + " " + str(classifier.classify(word_feats_sentence(self.data)))
+        while(True):
+		    for tweet in tweets:
+		    	print "{} wrote:".format(self.client_address[0])
+		    	print tweet + " " + str(classifier.classify(word_feats_sentence(tweet)))
+		    
+		    tweets = (self.request.recv(1024).strip()).split("\n")
         
         # just send back the same data, but upper-cased
-        self.request.sendall(self.data.upper())
+        #self.request.sendall(tweet.upper())
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 9999
