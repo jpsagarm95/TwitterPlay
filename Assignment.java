@@ -1,3 +1,10 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import twitter4j.FilterQuery;
 import twitter4j.StallWarning;
 import twitter4j.Status;
@@ -18,7 +25,6 @@ public class Assignment {
 	  	  FilterQuery tweetFilterQuery = new FilterQuery();
 	  	  String a[] = {"en"};
 	  	  tweetFilterQuery.language(a);
-	  	  
 	  	ConfigurationBuilder _configurationBuilder = new ConfigurationBuilder();
 		    _configurationBuilder.setOAuthConsumerKey(consumerKey)
 		    					 .setOAuthConsumerSecret(consumerSecret)
@@ -27,8 +33,9 @@ public class Assignment {
 		    					 .setJSONStoreEnabled(true);
 		    
 		    twitterStream = new TwitterStreamFactory(_configurationBuilder.build()).getInstance();
+		    
 		    StatusListener listener = new StatusListener() {
-				
+			
 				@Override
 				public void onException(Exception arg0) {
 					System.out.println("Error occured: "+ arg0.getMessage());
@@ -42,8 +49,33 @@ public class Assignment {
 				
 				@Override
 				public void onStatus(Status status) {
-					if(status.getLang().equals("en"))
-						System.out.println(status.getText().replaceAll("[\n\r]", ""));
+					//if(status.getLang().equals("en"))
+					//	System.out.println(status.getText().replaceAll("[\n\r]", ""));
+					File f = new File("file.txt");
+					PrintWriter out = null;
+					if ( f.exists() && !f.isDirectory() ) {
+						System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText() + " -> "+ status.getCreatedAt());
+						String mapstring = status.getUser().getScreenName() + " - " + status.getText() + " -> "+ status.getCreatedAt() +"\n";
+    				    
+    				    try {
+							out = new PrintWriter(new FileOutputStream(new File("file.txt"), true));
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					    out.append(mapstring);
+					    out.close();
+					}
+					else {
+					    try {
+							out = new PrintWriter("file.txt");
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					    //out.println(mapstring);
+					    out.close();
+					}
 				}
 				
 				@Override
