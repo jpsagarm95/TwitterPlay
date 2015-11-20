@@ -20,6 +20,7 @@ public class Assignment {
 	  private static String accessToken = "3279486750-BVQWfGE7QwMRs3tnnHYCipsQGW4dQIRwjV5ChEx";
 	  private static String accessTokenSecret = "5PezaKGEoTv4YJSt6CrVghkl62xF76Cifx81EIYZtPDXo";
 	  private static twitter4j.TwitterStream twitterStream;
+	  private static int totalCount = 0;
 	  
 	  public static void main(String args[]){
 	  	  FilterQuery tweetFilterQuery = new FilterQuery();
@@ -51,16 +52,18 @@ public class Assignment {
 				public void onStatus(Status status) {
 					//if(status.getLang().equals("en"))
 					//	System.out.println(status.getText().replaceAll("[\n\r]", ""));
-					File f = new File("file.txt");
+					String filename = totalCount / 10000 + ".txt";
+					File f = new File(filename);
 					PrintWriter out = null;
+					
 					if ( f.exists() && !f.isDirectory() ) {
+						totalCount++;
 						System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText() + " -> "+ status.getCreatedAt());
 						String mapstring = status.getUser().getScreenName() + " - " + status.getText() + " -> "+ status.getCreatedAt() +"\n";
     				    
     				    try {
-							out = new PrintWriter(new FileOutputStream(new File("file.txt"), true));
+							out = new PrintWriter(new FileOutputStream(new File(filename), true));
 						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					    out.append(mapstring);
@@ -68,12 +71,12 @@ public class Assignment {
 					}
 					else {
 					    try {
-							out = new PrintWriter("file.txt");
+							out = new PrintWriter(filename);
 						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					    //out.println(mapstring);
+					    String mapstring = status.getUser().getScreenName() + " - " + status.getText() + " -> "+ status.getCreatedAt() +"\n";
+					    out.println(mapstring);
 					    out.close();
 					}
 				}
