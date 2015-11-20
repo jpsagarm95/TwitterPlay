@@ -4,6 +4,8 @@ import nltk.classify.util
 from nltk.classify import NaiveBayesClassifier
 from nltk.corpus import movie_reviews
 from collections import defaultdict
+import os.path
+count = 0
  
 def word_feats(words):
     return dict([(word, True) for word in words])
@@ -28,19 +30,17 @@ trainfeats = negfeats + posfeats
 classifier = NaiveBayesClassifier.train(trainfeats)
 #print 'accuracy:', nltk.classify.util.accuracy(classifier, testfeats)
 #classifier.show_most_informative_features()
-	
-filename = sys.argv[1]
-f = open(filename,'r')
-dictionary_tweets = defaultdict(lambda:[0,0])
-#for sentence in f:
-#	print sentence + " " + classifier.classify(word_feats_sentence(sentence))
-tweet_count = 0
-while True:
-	line = f.readline()
-	tweet_count = tweet_count + 1
-	if line == "":
+while True:	
+	filename = str(count) + ".txt"
+	while not os.path.isfile(filename):
 		continue
-	else:
+	f = open(filename,'r')
+	dictionary_tweets = defaultdict(lambda:[0,0])
+	#for sentence in f:
+	#	print sentence + " " + classifier.classify(word_feats_sentence(sentence))
+	fp = open("sentiment_" + str(count) + ".txt", "w")
+	tweet_count = 0
+	for line in f:
 		word_parts = line.split("#")
 		sentiment = classifier.classify(word_feats_sentence(line))
 		if (sentiment == "pos"):
@@ -50,29 +50,13 @@ while True:
 		hash_words = []
 		for part in word_parts:
 			if len(part) > 0:
-				hash_word = part.split(" ")[0].lower()
+				# print part.split()
+				hash_word = part.split(' ')[0].lower()
 				dictionary_tweets[hash_word][sentiment] = dictionary_tweets[hash_word][sentiment] + 1
-		
-		if(tweet_count == 200):
-			print dictionary_tweets
-			tweet_count = 0
-				
-		
-		
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
+			
+	for i in dictionary_tweets:
+		if i.split('\n') != "":
+			print >> fp, i.split('\n')[0], dictionary_tweets[i][0], dictionary_tweets[i][1]
+	fp.close()
+	f.close()
+	count += 1
